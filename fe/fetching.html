@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invest in Middle Class</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            background: url('https://i.ibb.co/ZpMn7Zzh/output.png') no-repeat center center/cover;
+            color: white;
+            font-family: 'Georgia', serif;
+            position: relative;
+        }
+        h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: gold; 
+            text-shadow: 3px 3px 10px black;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border: 4px solid gold;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        input, button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+        }
+        input {
+            width: 80%;
+            border: 2px solid gold;
+            padding: 10px;
+        }
+        .submit-btn {
+            background: green;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        .invest-btn {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            background: gold;
+            border: 3px solid white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .invest-btn:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+        .qr-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        .qr-popup img {
+            width: 250px;
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome Everyone <br> Invest in Middle Class</h1>
+    
+    <form id="userForm">
+        <input type="text" id="name" placeholder="Enter your name" required>
+        <input type="text" id="phone" placeholder="Enter your phone" required>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+    
+    <button class="invest-btn" id="investBtn" onclick="handleInvest()" disabled>Invest 1 Rupee</button> 
+    
+    <div class="qr-popup" id="qrPopup">
+        <img src="https://i.ibb.co/q3N7sJNh/invest.png" alt="PhonePe QR Code">
+        <br>
+        <button class="close-btn" onclick="hideQR()">Close</button>
+    </div>
+
+    <script>
+        document.getElementById("userForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const phone = document.getElementById("phone").value;
+            const email = document.getElementById("email").value;
+
+            const userData = {
+                id: 0,  
+                name: name,
+                email: email,
+                phoneNumber: phone, 
+                paymentStatus: "pending"
+            };
+
+            try {
+                const response = await fetch("http://localhost:5051/api/User/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (response.ok) {
+                    alert("Submitted successfully!");
+                    document.getElementById("investBtn").disabled = false;
+                } else {
+                    alert("Error submitting details. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong!");
+            }
+        });
+
+        function handleInvest() {
+            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                window.location.href = "upi://pay?pa=bunny3karthik-1@okaxis&pn=Invest%20in%20Middle%20Class&mc=1234&tid=123456789&tr=INVEST1RS&tn=Pay%201%20Rupee&am=1&cu=INR";
+            } else {
+                document.getElementById("qrPopup").style.display = "block";
+            }
+        }
+
+        function hideQR() {
+            document.getElementById("qrPopup").style.display = "none";
+        }
+    </script>
+</body>
+</html>
