@@ -1,0 +1,45 @@
+# Ignore Visual Studio specific files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.cache
+
+# Ignore build outputs
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.pdb
+*.appx
+*.appxsym
+
+# Ignore NuGet Packages
+*.nupkg
+packages/
+!packages/repositories.config
+project.lock.json
+project.assets.json
+
+# Ignore .NET Core and .NET 5+ build artifacts
+*.deps.json
+*.runtimeconfig.json
+*.log
+*.db
+
+# Ignore secrets (User-secrets for .NET)
+secrets.json
+.env
+
+# Ignore Entity Framework Migrations
+Migrations/
+
+# Ignore Rider IDE files
+.idea/
+*.sln.iml
+
+# Ignore JetBrains Resharper
+_ReSharper.Caches/
+*.DotSettings.user
