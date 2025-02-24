@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using UserManagementAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,10 +10,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // ✅ Enable CORS (allow all origins, methods, headers)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder => builder.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader());
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
 
 // ✅ Register Controllers
@@ -30,13 +32,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-// ✅ Apply CORS before authorization
+// ✅ Move CORS before other middlewares
 app.UseCors("AllowAll");
 
+app.UseHttpsRedirection();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
+
